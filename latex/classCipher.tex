@@ -1,0 +1,147 @@
+\hypertarget{classCipher}{}\doxysection{Класс Cipher}
+\label{classCipher}\index{Cipher@{Cipher}}
+
+
+Класс, который реализует шифрование методом \char`\"{}Гронсвельда\char`\"{}.  
+
+
+
+
+{\ttfamily \#include $<$mod\+Alpha\+Cipher.\+h$>$}
+
+\doxysubsection*{Открытые члены}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCipher_ae728d0917db639dd49638a268298391f}\label{classCipher_ae728d0917db639dd49638a268298391f}} 
+\mbox{\hyperlink{classCipher_ae728d0917db639dd49638a268298391f}{Cipher}} ()=delete
+\begin{DoxyCompactList}\small\item\em Запрещённый конструктор без параметров \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classCipher_aa600f40a7856ca58974d07dda7f3f0c4}{Cipher}} (const std\+::wstring \&skey)
+\begin{DoxyCompactList}\small\item\em Конструктор для ключа \end{DoxyCompactList}\item 
+std\+::wstring \mbox{\hyperlink{classCipher_a0b3fc6d27b73820e6a5c1405de909e4b}{encrypt}} (const std\+::wstring \&open\+\_\+text)
+\begin{DoxyCompactList}\small\item\em Метод для шифрования \end{DoxyCompactList}\item 
+std\+::wstring \mbox{\hyperlink{classCipher_ac7676d30ce3c89114abbf4f0a57ec583}{decrypt}} (const std\+::wstring \&cipher\+\_\+text)
+\begin{DoxyCompactList}\small\item\em Метод, предназначенный для расшифрования \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Подробное описание}
+Класс, который реализует шифрование методом \char`\"{}Гронсвельда\char`\"{}. 
+
+\begin{DoxyWarning}{Предупреждения}
+Работает только с русскоязычными сообщениями 
+\end{DoxyWarning}
+
+
+\doxysubsection{Конструктор(ы)}
+\mbox{\Hypertarget{classCipher_aa600f40a7856ca58974d07dda7f3f0c4}\label{classCipher_aa600f40a7856ca58974d07dda7f3f0c4}} 
+\index{Cipher@{Cipher}!Cipher@{Cipher}}
+\index{Cipher@{Cipher}!Cipher@{Cipher}}
+\doxysubsubsection{\texorpdfstring{Cipher()}{Cipher()}}
+{\footnotesize\ttfamily Cipher\+::\+Cipher (\begin{DoxyParamCaption}\item[{const std\+::wstring \&}]{skey }\end{DoxyParamCaption})}
+
+
+
+Конструктор для ключа 
+
+Цикл for построен по строке-\/алфавиту и на каждом шаге добавляет в ассоциативный массив символ и его номер. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} i=0; i<numAlpha.size(); i++) \{}
+\DoxyCodeLine{     alphaNum[numAlpha[i]]=i;}
+\DoxyCodeLine{ \}}
+
+\end{DoxyCode}
+ 
+\begin{DoxyParams}{Аргументы}
+{\em std\+::wstring} & -\/ ключ в виде строки \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Методы}
+\mbox{\Hypertarget{classCipher_ac7676d30ce3c89114abbf4f0a57ec583}\label{classCipher_ac7676d30ce3c89114abbf4f0a57ec583}} 
+\index{Cipher@{Cipher}!decrypt@{decrypt}}
+\index{decrypt@{decrypt}!Cipher@{Cipher}}
+\doxysubsubsection{\texorpdfstring{decrypt()}{decrypt()}}
+{\footnotesize\ttfamily std\+::wstring Cipher\+::decrypt (\begin{DoxyParamCaption}\item[{const std\+::wstring \&}]{cipher\+\_\+text }\end{DoxyParamCaption})}
+
+
+
+Метод, предназначенный для расшифрования 
+
+Метод decrypt расшифровывает текст.
+
+Здесь сначала формируется вектор work из строки щифратекста с помощью метода convert(). А также происходит проверка шифротекста на наличие ошибки при помощи метода get\+Valid\+Alphabet\+Text(). 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{vector<int> work = convert(getValidAlphabetText(cipher\_text));}
+
+\end{DoxyCode}
+ Если при зашифровывании мы прибавляли значение ключа, то при расшифровывании значения ключа надо вычитать. А чтобы не получить отрицательных значений, выполняется еще прибавление значения модуля, так как такое прибавление не влияет на результат модулю. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} i=0; i < work.size(); i++) \{}
+\DoxyCodeLine{        work[i] = (work[i] + alphaNum.size() -\/ key[i \% key.size()]) \% alphaNum.size();}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Аргументы}
+{\em std\+::wstring} & cipher\+\_\+text -\/ сообщение, которое нужно расшифровать \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Исключения}
+{\em \mbox{\hyperlink{classcipher__error}{cipher\+\_\+error}},если} & строка, которая поступила на вход пустая или в ней есть недопустимые символы \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Возвращает}
+строка расшифрованного текста типа \char`\"{}wstring\char`\"{}
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Аргументы}
+{\em cipher\+\_\+text} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Возвращает}
+Возвращает расшифрованный текст. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCipher_a0b3fc6d27b73820e6a5c1405de909e4b}\label{classCipher_a0b3fc6d27b73820e6a5c1405de909e4b}} 
+\index{Cipher@{Cipher}!encrypt@{encrypt}}
+\index{encrypt@{encrypt}!Cipher@{Cipher}}
+\doxysubsubsection{\texorpdfstring{encrypt()}{encrypt()}}
+{\footnotesize\ttfamily std\+::wstring Cipher\+::encrypt (\begin{DoxyParamCaption}\item[{const std\+::wstring \&}]{open\+\_\+text }\end{DoxyParamCaption})}
+
+
+
+Метод для шифрования 
+
+Здесь сначала формируется вектор work из строки открытого текста с помощью метода convert(). А также происходит проверка текста на наличие ошибки при помощи метода get\+Valid\+Alphabet\+Text(). 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{vector<int> work = convert(getValidAlphabetText(open\_text));}
+
+\end{DoxyCode}
+ Затем в цикле к каждому элементу вектора прибавляется элемент ключа по модулю размера алфавита. Так как ключ может быть короче текста, то при индексации ключа выполняется операция по модулю размера ключа. Это позволяет использовать ключ циклически на длинных сообщениях. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} i=0; i < work.size(); i++) \{}
+\DoxyCodeLine{   work[i] = (work[i] + key[i \% key.size()]) \% alphaNum.size();}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ Далее, при возврате значения, вектор work опять преобразуется в строку. 
+\begin{DoxyParams}{Аргументы}
+{\em std\+::wstring} & open\+\_\+text -\/ сообщение, которое нужно зашифровать \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Исключения}
+{\em \mbox{\hyperlink{classcipher__error}{cipher\+\_\+error}},если} & строка, которая поступила на вход пустая или в ней есть недопустимые символы \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Возвращает}
+строка зашифрованного текста типа \char`\"{}wstring\char`\"{} 
+\end{DoxyReturn}
+
+
+Объявления и описания членов классов находятся в файлах\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{modAlphaCipher_8h}{mod\+Alpha\+Cipher.\+h}}\item 
+mod\+Alpha\+Cipher.\+cpp\end{DoxyCompactItemize}
